@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en" class="notranslate" translate="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="google" content="notranslate">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Baddies Brawl Value List</title>
+    <meta name="description" content="Official Baddies Brawl Value List. Accurate trading tool for the community.">
+    <link rel="icon" href="https://i.postimg.cc/DWJT0bw2/image.png" type="image/png">
+    
+    <style>
+        :root {
+            --bg-dark: #050a18;
+            --card-bg: #0d162d;
+            --accent-purple: #561c94;
+            --text-main: #ffffff;
+            --text-sub: #8a99b1;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --accent-red: #ff2d55;
+            --accent-green: #00ff88;
+            --rarity-low: linear-gradient(-45deg, #134e4a, #14532d, #064e3b, #166534);
+            --rarity-mid: linear-gradient(-45deg, #1e3a8a, #1e40af, #1d4ed8, #2563eb);
+            --rarity-high: linear-gradient(-45deg, #4c1d95, #6b21a8, #7e22ce, #581c87);
+        }
+
+        html, body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0; padding: 0;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            overflow-x: hidden;
+        }
+
+        .header { 
+            position: sticky; top: 0; z-index: 1000; 
+            background: rgba(5, 10, 24, 0.85); 
+            backdrop-filter: blur(20px); 
+            padding: 15px 20px 10px; 
+            border-bottom: 1px solid var(--border-color);
+            display: flex; flex-direction: column; gap: 8px;
+        }
+        .header-top { display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { 
+            font-size: 16px; margin: 0; font-weight: 800; letter-spacing: 0.5px; color: #fff5f7;
+            text-shadow: 0 0 10px rgba(255, 182, 193, 0.6); display: flex; align-items: center; gap: 5px;
+        }
+
+        .verified-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(0, 255, 136, 0.06); border: 1px solid rgba(0, 255, 136, 0.15);
+            padding: 5px 12px; border-radius: 100px; align-self: flex-start;
+        }
+        .v-dot { width: 6px; height: 6px; background: var(--accent-green); border-radius: 50%; box-shadow: 0 0 8px var(--accent-green); }
+        .v-text { font-size: 10px; color: var(--accent-green); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .v-sub { font-size: 10px; color: #fff; opacity: 0.8; font-weight: 400; margin-left: 2px; }
+
+        .trade-section { display: none; padding: 10px; background: rgba(0,0,0,0.3); border-bottom: 2px solid var(--accent-purple); }
+        .trade-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .side-title { font-size: 11px; font-weight: 900; text-align: center; margin-bottom: 4px; letter-spacing: 1px; }
+        .trade-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+        .trade-slot { aspect-ratio: 1/1; background: var(--card-bg); border: 1px dashed var(--border-color); border-radius: 6px; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; position: relative; }
+        .trade-slot img { width: 85%; height: 85%; object-fit: contain; }
+        .add-plus { color: var(--text-sub); font-size: 10px; font-weight: bold; opacity: 0.5; }
+        .side-total { text-align: center; font-size: 10px; font-weight: bold; color: #ffd700; margin-top: 6px; background: #000; padding: 4px; border-radius: 4px; border: 1px solid var(--border-color); }
+
+        #pickerModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-dark); z-index: 10000; display: none; flex-direction: column; padding: 15px; box-sizing: border-box; }
+        .picker-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; overflow-y: auto; padding-bottom: 20px; }
+        .p-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 5px; text-align: center; cursor: pointer; }
+        .p-card img { width: 100%; aspect-ratio: 1/1; object-fit: contain; }
+        .p-card div { font-size: 9px; color: #fff; margin-top: 4px; white-space: nowrap; overflow: hidden; }
+
+        .search-container { padding: 15px 20px 5px; }
+        #searchInput { 
+            width: 100%; padding: 12px 18px; background: rgba(255, 255, 255, 0.03); 
+            border: 1px solid var(--border-color); border-radius: 12px; color: white; outline: none; box-sizing: border-box; 
+        }
+        #searchInput:focus { border-color: var(--accent-purple); background: rgba(255, 255, 255, 0.06); }
+        
+        .filter-container { display: flex; gap: 10px; padding: 10px 20px; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
+        .filter-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-sub); padding: 8px 18px; border-radius: 50px; font-size: 13px; font-weight: 600; cursor: pointer; }
+        .filter-btn.active { background: var(--accent-purple); color: white; }
+        .btn-trade-toggle { background: var(--accent-red) !important; color: white !important; border: none !important; }
+
+        .all-items-title { padding: 10px 20px; font-size: 18px; font-weight: 700; color: #ffffff; }
+        .grid-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 15px 30px; }
+        .item-card { background: var(--card-bg); border-radius: 18px; overflow: hidden; border: 1px solid var(--border-color); }
+        .image-box { 
+            width: 100%; aspect-ratio: 1.2 / 1; background: #1a1a1a; 
+            background-size: 400% 400% !important; animation: gradient-bg 5s ease infinite; 
+            display: flex; justify-content: center; align-items: center;
+        }
+        .image-box img { width: 80%; height: 80%; object-fit: contain; }
+        .info-box { padding: 12px; }
+        .tag { background: rgba(255, 255, 255, 0.08); color: var(--text-sub); font-size: 9px; padding: 2px 8px; border-radius: 20px; display: inline-block; margin-bottom: 6px; text-transform: uppercase; }
+        .item-name { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .item-value span { color: #ffd700; font-weight: 600; }
+        .item-old { font-size: 11px; color: #ff2d55; font-weight: 600; }
+
+        @keyframes gradient-bg { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+    </style>
+</head>
+<body>
+
+    <!-- Modal chọn đồ khi Trade -->
+    <div id="pickerModal">
+        <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <b style="font-size:14px">CHỌN VẬT PHẨM</b>
+            <button onclick="closePicker()" style="background:none; border:none; color:#fff; font-size:24px; cursor:pointer;">×</button>
+        </div>
+        <div class="picker-grid" id="pickerGrid"></div>
+    </div>
+
+    <!-- Nội dung chính -->
+    <div id="mainContent">
+        <div class="header">
+            <div class="header-top">
+                <h1>BADDIES BRAWL VALUE 🌸</h1>
+                <div style="opacity: 0.5; font-size: 20px; cursor:pointer;">☰</div>
+            </div>
+            <div class="verified-badge">
+                <div class="v-dot"></div>
+                <span class="v-text">Official</span>
+                <span class="v-sub">• Verified by ICEbreaker (No Login) Update 5/15</span>
+            </div>
+        </div>
+
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search item name..." onkeyup="filterItems()">
+        </div>
+
+        <div class="filter-container">
+            <button class="filter-btn active" onclick="setFilter('All', this)">All Items</button>
+            <button class="filter-btn btn-trade-toggle" onclick="toggleTrade()">TRADE</button>
+            <button class="filter-btn" onclick="setFilter('Style', this)">Style</button>
+            <button class="filter-btn" onclick="setFilter('Skin', this)">Skin</button>
+            <button class="filter-btn" onclick="setFilter('Aura', this)">Aura</button>
+            <button class="filter-btn" onclick="setFilter('Special Weapons', this)">Special</button>
+        </div>
+
+        <!-- Khung Trade -->
+        <div class="trade-section" id="tradeSection">
+            <div class="trade-wrapper">
+                <div>
+                    <div class="side-title" style="color:var(--accent-red)">YOU</div>
+                    <div class="trade-grid" id="gridYou"></div>
+                    <div class="side-total">Value: <span id="totalYou">0</span></div>
+                </div>
+                <div>
+                    <div class="side-title" style="color:#00d2ff">THEM</div>
+                    <div class="trade-grid" id="gridThem"></div>
+                    <div class="side-total">Value: <span id="totalThem">0</span></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="all-items-title" id="listTitle">All Items</div>
+        
+        <!-- Nơi hiển thị các item (Render qua JS) -->
+        <div class="grid-container" id="itemGrid"></div>
+    </div>
+
+    <script>
+        // DATA ITEM: Thêm bớt item chỉ cần thêm vào mảng này, không cần gõ HTML dài dòng
+        const itemsData = [
+            { name: "Monkey Style", tag: "Style", value: 8500, old: "-", img: "https://i.postimg.cc/7Z8bVQ4d/5d9d7c932f69c220afd5b248c74ba066.png" },
+            { name: "Princess style", tag: "Style", value: 9700, old: "11.000", img: "https://i.postimg.cc/Ss6pmV3R/66c6629cb38610dd030654bcb36dced8.png" },
+            { name: "EggRose", tag: "Skin", value: 15540, old: "9.820", img: "https://i.postimg.cc/zv4wpSDW/b01999b81cc4701dd38d4ba51a8ffc52-(1).png" },
+            { name: "Arctic", tag: "Skin", value: 47000, old: "44.560", img: "https://i.postimg.cc/PrZV9PGb/b01999b81cc4701dd38d4ba51a8ffc52.png" },
+            { name: "Celestial Wings", tag: "Aura", value: 15600, old: "-", img: "https://i.postimg.cc/RZd2nXx0/2b23f0abfb9b978248d01cd669837058.png" },
+            { name: "LipSmash", tag: "Aura", value: 4850, old: "257", img: "https://i.postimg.cc/3JndWF6k/e5520dc6533b59136756a2eaa58f472b.png" },
+            { name: "Bonk Style", tag: "Style", value: 1700, old: "600", img: "https://i.postimg.cc/c49Ld4gx/9a223c3b0772c2c0dceba6be69072734-(2).png" },
+            { name: "Elf Style", tag: "Style", value: 3653, old: "4.500", img: "https://i.postimg.cc/rFmqZXhN/9a223c3b0772c2c0dceba6be69072734.png" },
+            { name: "Blood Reaver", tag: "Skin", value: 6780, old: "4.500", img: "https://i.postimg.cc/Y0SBPYxG/1f5c9c97731f782b83f50d535b1d628c.png" },
+            { name: "Icebreaker Style", tag: "Style", value: 8700, old: "6.000", img: "https://i.postimg.cc/C1F3ZkXm/d352bcae62ef926c07436716ca738917.png" },
+            { name: "Spiderlord", tag: "Skin", value: 5600, old: "8.400", img: "https://i.postimg.cc/qM9Ws9W5/1777467145852.png" },
+            { name: "Omen", tag: "Skin", value: 7500, old: "11.000", img: "https://i.postimg.cc/N0xVwLFd/8cdfc5dbcee53d8094bae03297c4d4e6.png" },
+            { name: "Bat", tag: "Aura", value: 59800, old: "50.000", img: "https://i.postimg.cc/02JByVrs/1777463502312.png" },
+            { name: "Witch Style", tag: "Style", value: 13200, old: "20.000", img: "https://i.postimg.cc/52dkY8CM/e3975e9e1f49870cc17111d5fa93f719-(2).png" },
+            { name: "Zombie Style", tag: "Style", value: 13200, old: "9.980", img: "https://i.postimg.cc/Lsvyb7Qv/e3975e9e1f49870cc17111d5fa93f719.png" },
+            { name: "Ghost", tag: "Skin", value: 34750, old: "17.000", img: "https://i.postimg.cc/ryRBDVPq/7e891b57300ffb2641afabba87474283.png" },
+            { name: "Bunny Style", tag: "Style", value: 8100, old: "-", img: "https://i.postimg.cc/BQKZzcQK/Screenshot-20260502-084851.png" },
+            { name: "Cupid Bow", tag: "Special Weapons", value: 7800, old: "6.500", img: "https://i.postimg.cc/j2Tnjgjp/Screenshot-20260502-093129.png" },
+            { name: "Toxic Mace", tag: "Special Weapons", value: 11000, old: "9.500", img: "https://i.postimg.cc/Sxd5BJJr/Screenshot-20260502-093409.png" },
+            { name: "Cosmic Magnet", tag: "Special Weapons", value: 6500, old: "-", img: "https://i.postimg.cc/wvyGR2Fn/Screenshot-20260502-093425.png" },
+            { name: "Starry", tag: "Skin", value: 17700, old: "17.000", img: "https://i.postimg.cc/HsChjQM7/Screenshot-20260502-180718.png" },
+            { name: "Cherry Pop", tag: "Skin", value: 0, old: "-", img: "https://i.postimg.cc/Hk6ZSRhZ/Screenshot-20260502-184425.png" }
+        ];
+
+        let currentFilter = 'All';
+        let tradeYou = new Array(9).fill(null);
+        let tradeThem = new Array(9).fill(null);
+        let activeSide = null, activeSlot = null;
+
+        // Định dạng số hiển thị (Ví dụ: 8500 -> 8.500)
+        function formatNum(num) {
+            return num.toLocaleString('de-DE');
+        }
+
+        // Render danh sách Item
+        function renderItems(list) {
+            const grid = document.getElementById('itemGrid');
+            grid.innerHTML = '';
+            list.forEach(item => {
+                grid.innerHTML += `
+                    <div class="item-card">
+                        <div class="image-box"><img src="${item.img}" alt="${item.name}"></div>
+                        <div class="info-box">
+                            <span class="tag">${item.tag}</span>
+                            <div class="item-name">${item.name}</div>
+                            <div class="item-value">Value: <span>${formatNum(item.value)}</span></div>
+                            <div class="item-old">Old: ${item.old}</div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Lọc Item theo Tag
+        function setFilter(tag, btn) {
+            currentFilter = tag;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('listTitle').innerText = tag === 'All' ? 'All Items' : tag;
+            filterItems();
+        }
+
+        // Tìm kiếm & Lọc kết hợp
+        function filterItems() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = itemsData.filter(item => {
+                const matchTag = (currentFilter === 'All' || item.tag === currentFilter);
+                const matchSearch = item.name.toLowerCase().includes(query);
+                return matchTag && matchSearch;
+            });
+            renderItems(filtered);
+        }
+
+        // Bật/Tắt khung Trade
+        function toggleTrade() {
+            const tradeSec = document.getElementById('tradeSection');
+            tradeSec.style.display = tradeSec.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Khởi tạo các ô Trade Slots
+        function initTradeGrids() {
+            ['gridYou', 'gridThem'].forEach((id, isThem) => {
+                const container = document.getElementById(id);
+                container.innerHTML = '';
+                for(let i=0; i<9; i++) {
+                    container.innerHTML += `<div class="trade-slot" onclick="openPicker('${isThem ? 'them' : 'you'}', ${i})"><span class="add-plus">+</span></div>`;
+                }
+            });
+        }
+
+        // Mở Picker chọn đồ
+        function openPicker(side, index) {
+            activeSide = side;
+            activeSlot = index;
+            const pGrid = document.getElementById('pickerGrid');
+            pGrid.innerHTML = '';
+            itemsData.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'p-card';
+                card.innerHTML = `<img src="${item.img}"><div>${item.name}</div>`;
+                card.onclick = () => selectItemForTrade(item);
+                pGrid.appendChild(card);
+            });
+            document.getElementById('pickerModal').style.display = 'flex';
+        }
+
+        function closePicker() {
+            document.getElementById('pickerModal').style.display = 'none';
+        }
+
+        // Chọn Item đưa vào Slot Trade
+        function selectItemForTrade(item) {
+            const arr = activeSide === 'you' ? tradeYou : tradeThem;
+            arr[activeSlot] = item;
+            updateTradeUI();
+            closePicker();
+        }
+
+        // Cập nhật giao diện Trade
+        function updateTradeUI() {
+            ['you', 'them'].forEach(side => {
+                const arr = side === 'you' ? tradeYou : tradeThem;
+                const grid = document.getElementById(side === 'you' ? 'gridYou' : 'gridThem');
+                let total = 0;
+
+                arr.forEach((item, idx) => {
+                    const slot = grid.children[idx];
+                    if(item) {
+                        slot.innerHTML = `<img src="${item.img}">`;
+                        total += item.value;
+                    } else {
+                        slot.innerHTML = `<span class="add-plus">+</span>`;
+                    }
+                });
+                document.getElementById(side === 'you' ? 'totalYou' : 'totalThem').innerText = formatNum(total);
+            });
+        }
+
+        // Chạy lần đầu khi load trang
+        renderItems(itemsData);
+        initTradeGrids();
+    </script>
+</body>
+          </html>
+
